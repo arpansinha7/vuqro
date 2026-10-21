@@ -59,11 +59,18 @@ app.get('/:shortUrl', async (req, res) => {
     {
         const { shortUrl } = req.params;
 
-        const data = await redisClient.get(`url:${shortUrl}`);
-
-        if(data)
+        try
         {
-            return res.redirect(data);
+            const data = await redisClient.get(`url:${shortUrl}`);
+
+            if(data)
+            {
+                return res.redirect(data);
+            }
+        }
+        catch(error)
+        {
+            console.error(`Redis error: ${error.message}`);
         }
 
         const urlData = await db.findOne({shortUrl: shortUrl});
@@ -74,10 +81,16 @@ app.get('/:shortUrl', async (req, res) => {
             return;
         }
 
-        await redisClient.set(`url:${urlData.shortUrl}`, urlData.longUrl, {
-            EX: 600
-        });
-
+        try
+        {
+            await redisClient.set(`url:${urlData.shortUrl}`, urlData.longUrl, {
+                EX: 600
+            });
+        }
+        catch(error)
+        {
+            console.error(`Redis error: ${error.message}`);
+        }
         res.redirect(urlData.longUrl);
     }
     catch(error)
