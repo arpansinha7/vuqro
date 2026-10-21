@@ -9,7 +9,7 @@ import base62Encode from './utils/base62Encode.js';
 import { error } from 'console';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 await connectDB();
 
