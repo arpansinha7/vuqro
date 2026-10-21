@@ -8,6 +8,7 @@ Vuqro is a URL shortener that transforms long URLs into short, shareable links. 
 - **Instant Redirection** — Redirect users to the original destination through a short link.
 - **One-Click Copy** — Copy generated links directly to your clipboard.
 - **URL Validation** — Validate URLs before submitting them.
+- **Redis Caching** — Cache URL mappings for faster redirects, with graceful fallback to MongoDB when Redis is unavailable.
 - **Responsive Interface** — A clean, responsive UI with a dark theme and emerald-green accents.
 - **Error Handling** — Clear feedback for invalid URLs and unsuccessful requests.
 
@@ -23,6 +24,7 @@ Vuqro is a URL shortener that transforms long URLs into short, shareable links. 
 - Express.js
 - MongoDB
 - Mongoose
+- Redis
 
 ## 🚀 Getting Started
 
@@ -30,9 +32,10 @@ Vuqro is a URL shortener that transforms long URLs into short, shareable links. 
 
 Make sure you have the following installed:
 
-- [Node.js]
+- Node.js
 - npm
-- [MongoDB]
+- MongoDB
+- Redis
 
 ### 1. Clone the Repository
 
@@ -93,4 +96,4 @@ Open the local URL displayed in your terminal to use Vuqro.
 
 ---
 
-**V1.0** 💚
+💚
