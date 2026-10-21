@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 await connectDB();
 
 app.use(cors());
+app.use(express.json());
 
 app.post('/api/urls', async (req, res) => {
 
@@ -30,10 +31,14 @@ app.post('/api/urls', async (req, res) => {
             shortUrl: shortUrl
         });
 
-        res.status(201).json(shortUrl);
+        res.status(201).json({
+            shortUrl: `http://localhost:${PORT}/${shortUrl}`
+        });
     }
     catch(error)
     {
+        console.log('Error: ', error.message);
+
         if(error.code === '11000')
         {
             res.status(503).json({
@@ -42,12 +47,36 @@ app.post('/api/urls', async (req, res) => {
             return;
         }
         res.status(500).json({
-            error: `Internal server error.`
+            error: `Internal Server Error.`
         });
     }
 
 });
 
+app.get('/:shortUrl', async (req, res) => {
+
+    try
+    {
+        const { shortUrl } = req.params;
+
+        const urlData = await db.findOne({shortUrl: shortUrl});
+
+        if(!urlData)
+        {
+            res.status(404).json({error: 'URL not found!'});
+            return;
+        }
+
+        res.redirect(urlData.longUrl);
+    }
+    catch(error)
+    {
+        console.log('Error: ', error.message);
+        res.status(500).json({
+            error: 'Internal Server Error'
+        });
+    }
+});
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
