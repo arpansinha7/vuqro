@@ -1,6 +1,6 @@
 # Vuqro 🔗
 
-Vuqro is a simple, full-stack URL shortener that transforms long URLs into short, shareable links. Built with a modern tech stack and a minimal dark interface, Vuqro makes shortening and sharing links effortless.
+Vuqro is a URL shortener that transforms long URLs into short, shareable links. Vuqro makes shortening and sharing links effortless.
 
 ## ✨ Features
 
