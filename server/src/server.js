@@ -3,15 +3,15 @@ import 'dotenv/config';
 import cors from 'cors';
 import connectDB from './config/connectDB.js';
 import db from './model/db.js';
-import mongoose from 'mongoose';
 import crypto from 'crypto';
 import base62Encode from './utils/base62Encode.js';
-import { error } from 'console';
+import { ConnectRedis, redisClient } from './config/redisClient.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 await connectDB();
+await ConnectRedis();
 
 app.use(cors());
 app.use(express.json());
@@ -25,7 +25,7 @@ app.post('/api/urls', async (req, res) => {
         const uniqueId = crypto.randomInt(0, 62**7);
         const shortUrl = base62Encode(uniqueId);
 
-        const document = await db.create({
+        await db.create({
             id: uniqueId,
             longUrl: longUrl,
             shortUrl: shortUrl
@@ -59,6 +59,13 @@ app.get('/:shortUrl', async (req, res) => {
     {
         const { shortUrl } = req.params;
 
+        const data = await redisClient.get(`url:${shortUrl}`);
+
+        if(data)
+        {
+            return res.redirect(data);
+        }
+
         const urlData = await db.findOne({shortUrl: shortUrl});
 
         if(!urlData)
@@ -66,6 +73,10 @@ app.get('/:shortUrl', async (req, res) => {
             res.status(404).json({error: 'URL not found!'});
             return;
         }
+
+        await redisClient.set(`url:${urlData.shortUrl}`, urlData.longUrl, {
+            EX: 600
+        });
 
         res.redirect(urlData.longUrl);
     }
