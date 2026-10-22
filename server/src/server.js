@@ -7,7 +7,7 @@ import crypto from 'crypto';
 import base62Encode from './utils/base62Encode.js';
 import { ConnectRedis, redisClient } from './config/redisClient.js';
 import { urlCreationRateLimiter, redirectRateLimiter } from './middleware/rateLimiter.js';
-import rateLimit from 'express-rate-limit';
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -34,7 +34,7 @@ app.post('/api/urls', urlCreationRateLimiter, async (req, res) => {
         });
 
         res.status(201).json({
-            shortUrl: `http://localhost:${PORT}/${shortUrl}`
+            shortUrl: `${process.env.BASE_URL}/${shortUrl}`
         });
     }
     catch(error)
