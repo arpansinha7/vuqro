@@ -11,6 +11,7 @@ Vuqro is a URL shortener that transforms long URLs into short, shareable links. 
 - **Redis Caching** — Cache URL mappings for faster redirects, with graceful fallback to MongoDB when Redis is unavailable.
 - **Responsive Interface** — A clean, responsive UI with a dark theme and emerald-green accents.
 - **Error Handling** — Clear feedback for invalid URLs and unsuccessful requests.
+- **Rate Limiting** — Restrict excessive requests to help prevent abuse and protect the API from request floods.
 
 ## 🛠️ Tech Stack
 
