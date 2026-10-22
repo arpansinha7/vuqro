@@ -58,6 +58,11 @@ function App()
 
       if(!response.ok) 
       {
+        if(response.status === 429)
+        {
+          setError("Too many requests. Please wait a moment before trying again.");
+          return;
+        }
         setError(typeof data.error === "string" ? data.error
             : data.error?.message || data.message || "Couldn't shorten this URL. Please try again."
         );
