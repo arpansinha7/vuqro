@@ -6,6 +6,8 @@ import db from './model/db.js';
 import crypto from 'crypto';
 import base62Encode from './utils/base62Encode.js';
 import { ConnectRedis, redisClient } from './config/redisClient.js';
+import { urlCreationRateLimiter, redirectRateLimiter } from './middleware/rateLimiter.js';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,7 +18,7 @@ await ConnectRedis();
 app.use(cors());
 app.use(express.json());
 
-app.post('/api/urls', async (req, res) => {
+app.post('/api/urls', urlCreationRateLimiter, async (req, res) => {
 
     try
     {
@@ -39,7 +41,7 @@ app.post('/api/urls', async (req, res) => {
     {
         console.log('Error: ', error.message);
 
-        if(error.code === '11000')
+        if(error.code === 11000)
         {
             res.status(503).json({
                 error: `Please try again.`
@@ -53,7 +55,7 @@ app.post('/api/urls', async (req, res) => {
 
 });
 
-app.get('/:shortUrl', async (req, res) => {
+app.get('/:shortUrl', redirectRateLimiter, async (req, res) => {
 
     try
     {
