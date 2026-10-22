@@ -35,8 +35,8 @@ Make sure you have the following installed:
 
 - Node.js
 - npm
-- MongoDB
-- Redis
+- MongoDB instance or MongoDB Atlas account
+- Redis or Redis Cloud account
 
 ### 1. Clone the Repository
 
@@ -60,7 +60,14 @@ Create your environment file from the provided template:
 cp .env.example .env
 ```
 
-Fill in the required environment variables in server/.env using your own configuration.
+Fill in the required environment variables in `server/.env` using your own configuration.
+
+| Variable | Description |
+|---|---|
+| `PORT` | Backend server port (defaults to `8080`) |
+| `MONGO_URI` | MongoDB connection string |
+| `REDIS_URI` | Redis connection URI |
+| `BASE_URL` | Base URL used to generate short links |
 
 Replace the MongoDB URI with your own connection string if you're using MongoDB Atlas. Make sure the environment variable names match those used in your backend.
 
@@ -78,11 +85,17 @@ npm start
 
 ### 3. Set Up the Frontend
 
-Open a new terminal and navigate to the client directory from the project root:
+Open a second terminal from the project root:
 
 ```bash
 cd client
 npm install
+```
+
+Create `client/.env` and configure:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
 ```
 
 Start the frontend development server:
