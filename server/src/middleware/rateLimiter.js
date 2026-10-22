@@ -22,12 +22,8 @@ const redirectRateLimiter = rateLimit({
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     ipv6Subnet: 56,
-    message:{
-
-    },
-    statusCode,
     handler: (req, res) => {
-        res.status(409).send(`
+        res.status(429).send(`
         <!DOCTYPE html>
         <html lang="en">
           <head>
